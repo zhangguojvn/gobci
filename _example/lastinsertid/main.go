@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mattn/go-oci8"
+	"github.com/zhangguojvn/gobci"
 )
 
 type ID string
@@ -18,7 +18,7 @@ func (id ID) Scan(src interface{}) error {
 func main() {
 	os.Setenv("NLS_LANG", "")
 
-	db, err := sql.Open("oci8", getDSN())
+	db, err := sql.Open("gobci", getDSN())
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -43,7 +43,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	rowID := oci8.GetLastInsertId(lastInsertId)
+	rowID := gobci.GetLastInsertId(lastInsertId)
 	var id string
 	err = db.QueryRow("select id from lastinsertid_example where rowid = :1", rowID).Scan(&id)
 	if err != nil {

@@ -1,4 +1,4 @@
-package oci8
+package gobci
 
 import (
 	"context"

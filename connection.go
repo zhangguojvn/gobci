@@ -1,4 +1,4 @@
-package oci8
+package gobci
 
 // #include "oci8.go.h"
 import "C"

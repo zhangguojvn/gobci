@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 
-	_ "github.com/mattn/go-oci8"
+	_ "github.com/zhangguojun/gobci"
 )
 
 func main() {
-	db, err := sql.Open("oci8", getDSN())
+	db, err := sql.Open("gobci", getDSN())
 	if err != nil {
 		fmt.Println(err)
 		return

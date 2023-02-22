@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	_ "github.com/mattn/go-oci8"
+	_ "github.com/zhangguojvn/gobci"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 	}
 	os.Setenv("NLS_LANG", "")
 
-	db, err := sql.Open("oci8", os.Args[1])
+	db, err := sql.Open("gobci", os.Args[1])
 	if err != nil {
 		fmt.Println(err)
 		return

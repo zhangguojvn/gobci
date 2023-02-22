@@ -6,11 +6,11 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/mattn/go-oci8"
+	_ "github.com/zhangguojvn/gobci"
 )
 
 func main() {
-	db, err := sql.Open("oci8", getDSN())
+	db, err := sql.Open("gobci", getDSN())
 	if err != nil {
 		log.Fatal(err)
 	}

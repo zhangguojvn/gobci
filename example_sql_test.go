@@ -1,4 +1,4 @@
-package oci8_test
+package gobci_test
 
 import (
 	"bytes"
@@ -10,35 +10,35 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mattn/go-oci8"
+	"github.com/zhangguojvn/gobci"
 )
 
 func Example_sqlSelect() {
 	// Example shows how to do a basic select
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase {
+	if gobci.TestDisableDatabase {
 		fmt.Println(1)
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -129,28 +129,28 @@ func Example_sqlFunction() {
 	// Example shows how to do a function call with binds
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase {
+	if gobci.TestDisableDatabase {
 		fmt.Println(3)
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -201,28 +201,28 @@ func Example_sqlInsert() {
 	// Example shows how to do a single insert
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase || oci8.TestDisableDestructive {
+	if gobci.TestDisableDatabase || gobci.TestDisableDestructive {
 		fmt.Println(1)
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -241,7 +241,7 @@ func Example_sqlInsert() {
 	}()
 
 	// create table
-	tableName := "E_INSERT_" + oci8.TestTimeString
+	tableName := "E_INSERT_" + gobci.TestTimeString
 	query := "create table " + tableName + " ( A INTEGER )"
 	ctx, cancel := context.WithTimeout(context.Background(), 55*time.Second)
 	_, err = db.ExecContext(ctx, query)
@@ -289,28 +289,28 @@ func Example_sqlManyInserts() {
 	// Example shows how to do a many inserts
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase || oci8.TestDisableDestructive {
+	if gobci.TestDisableDatabase || gobci.TestDisableDestructive {
 		fmt.Println(3)
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -329,7 +329,7 @@ func Example_sqlManyInserts() {
 	}()
 
 	// create table
-	tableName := "E_MANY_INSERT_" + oci8.TestTimeString
+	tableName := "E_MANY_INSERT_" + gobci.TestTimeString
 	query := "create table " + tableName + " ( A INTEGER )"
 	ctx, cancel := context.WithTimeout(context.Background(), 55*time.Second)
 	_, err = db.ExecContext(ctx, query)
@@ -435,28 +435,28 @@ func Example_sqlClob() {
 	// Example shows how write and read a clob
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase || oci8.TestDisableDestructive {
+	if gobci.TestDisableDatabase || gobci.TestDisableDestructive {
 		fmt.Println("done")
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -475,7 +475,7 @@ func Example_sqlClob() {
 	}()
 
 	// create table
-	tableName := "E_CLOB_" + oci8.TestTimeString
+	tableName := "E_CLOB_" + gobci.TestTimeString
 	query := "create table " + tableName + " ( A CLOB )"
 	ctx, cancel := context.WithTimeout(context.Background(), 55*time.Second)
 	_, err = db.ExecContext(ctx, query)
@@ -559,28 +559,28 @@ func Example_sqlBlob() {
 	// Example shows how write and read a blob
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase || oci8.TestDisableDestructive {
+	if gobci.TestDisableDatabase || gobci.TestDisableDestructive {
 		fmt.Println("done")
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -599,7 +599,7 @@ func Example_sqlBlob() {
 	}()
 
 	// create table
-	tableName := "E_BLOB_" + oci8.TestTimeString
+	tableName := "E_BLOB_" + gobci.TestTimeString
 	query := "create table " + tableName + " ( A BLOB )"
 	ctx, cancel := context.WithTimeout(context.Background(), 55*time.Second)
 	_, err = db.ExecContext(ctx, query)
@@ -683,28 +683,28 @@ func Example_sqlRowid() {
 	// Example shows a few ways to get rowid
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase || oci8.TestDisableDestructive {
+	if gobci.TestDisableDatabase || gobci.TestDisableDestructive {
 		fmt.Println("done")
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -723,7 +723,7 @@ func Example_sqlRowid() {
 	}()
 
 	// create table
-	tableName := "E_ROWID_" + oci8.TestTimeString
+	tableName := "E_ROWID_" + gobci.TestTimeString
 	query := "create table " + tableName + " ( A INTEGER )"
 	ctx, cancel := context.WithTimeout(context.Background(), 55*time.Second)
 	_, err = db.ExecContext(ctx, query)
@@ -753,7 +753,7 @@ func Example_sqlRowid() {
 		fmt.Println("LastInsertId error is not nil:", err)
 		return
 	}
-	rowid2 = oci8.GetLastInsertId(id)
+	rowid2 = gobci.GetLastInsertId(id)
 
 	// select rowid
 	var rowid3 string // rowid will be put into here

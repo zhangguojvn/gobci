@@ -1,4 +1,4 @@
-package oci8
+package gobci
 
 // #include "oci8.go.h"
 import "C"
@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -179,27 +178,35 @@ func (drv *DriverStruct) Open(dsnString string) (driver.Conn, error) {
 	var envP *C.OCIEnv
 	envPP := &envP
 	var result C.sword
-	charset := C.ub2(0)
+	//charset := C.ub2(0)
 
-	if os.Getenv("NLS_LANG") == "" && os.Getenv("NLS_NCHAR") == "" {
-		charset = defaultCharset
-	}
+	// if os.Getenv("NLS_LANG") == "" && os.Getenv("NLS_NCHAR") == "" {
+	// 	charset = defaultCharset
+	// }
 
-	result = C.OCIEnvNlsCreate(
-		envPP,          // pointer to a handle to the environment
-		C.OCI_THREADED, // environment mode: https://docs.oracle.com/cd/B28359_01/appdev.111/b28395/oci16rel001.htm#LNOCI87683
-		nil,            // Specifies the user-defined context for the memory callback routines.
-		nil,            // Specifies the user-defined memory allocation function. If mode is OCI_THREADED, this memory allocation routine must be thread-safe.
-		nil,            // Specifies the user-defined memory re-allocation function. If the mode is OCI_THREADED, this memory allocation routine must be thread safe.
-		nil,            // Specifies the user-defined memory free function. If mode is OCI_THREADED, this memory free routine must be thread-safe.
-		0,              // Specifies the amount of user memory to be allocated for the duration of the environment.
-		nil,            // Returns a pointer to the user memory of size xtramemsz allocated by the call for the user.
-		charset,        // The client-side character set for the current environment handle. If it is 0, the NLS_LANG setting is used.
-		charset,        // The client-side national character set for the current environment handle. If it is 0, NLS_NCHAR setting is used.
-	)
+	result = C.OCIInitialize(C.OCI_THREADED, nil, nil, nil, nil)
 	if result != C.OCI_SUCCESS {
-		return nil, errors.New("OCIEnvNlsCreate error")
+		return nil, errors.New("OCIInitialize error")
 	}
+	result = C.OCIEnvInit(envPP, C.OCI_DEFAULT, 0, nil)
+	if result != C.OCI_SUCCESS {
+		return nil, errors.New("OCIEnvInit error")
+	}
+	// result = C.OCIEnvNlsCreate(
+	// 	envPP,          // pointer to a handle to the environment
+	// 	C.OCI_THREADED, // environment mode: https://docs.oracle.com/cd/B28359_01/appdev.111/b28395/oci16rel001.htm#LNOCI87683
+	// 	nil,            // Specifies the user-defined context for the memory callback routines.
+	// 	nil,            // Specifies the user-defined memory allocation function. If mode is OCI_THREADED, this memory allocation routine must be thread-safe.
+	// 	nil,            // Specifies the user-defined memory re-allocation function. If the mode is OCI_THREADED, this memory allocation routine must be thread safe.
+	// 	nil,            // Specifies the user-defined memory free function. If mode is OCI_THREADED, this memory free routine must be thread-safe.
+	// 	0,              // Specifies the amount of user memory to be allocated for the duration of the environment.
+	// 	nil,            // Returns a pointer to the user memory of size xtramemsz allocated by the call for the user.
+	// 	charset,        // The client-side character set for the current environment handle. If it is 0, the NLS_LANG setting is used.
+	// 	charset,        // The client-side national character set for the current environment handle. If it is 0, NLS_NCHAR setting is used.
+	// )
+	// if result != C.OCI_SUCCESS {
+	// 	return nil, errors.New("OCIEnvNlsCreate error")
+	// }
 	conn.env = *envPP
 
 	// defer on error handle free

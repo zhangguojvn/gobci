@@ -1,3 +1,3 @@
-module github.com/mattn/go-oci8
+module github.com/zhangguojvn/gobci
 
 go 1.13

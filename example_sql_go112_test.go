@@ -1,6 +1,7 @@
+//go:build go1.12
 // +build go1.12
 
-package oci8_test
+package gobci_test
 
 import (
 	"context"
@@ -10,35 +11,35 @@ import (
 	"os"
 	"time"
 
-	"github.com/mattn/go-oci8"
+	"github.com/zhangguojvn/gobci"
 )
 
 func Example_sqlCursor() {
 	// Example shows how to do a cursor select
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase {
+	if gobci.TestDisableDatabase {
 		fmt.Println(3)
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -166,28 +167,28 @@ func Example_sqlCursorFunction() {
 	// Example shows how to do a cursor select from function
 
 	// For testing, check if database tests are disabled
-	if oci8.TestDisableDatabase || oci8.TestDisableDestructive {
+	if gobci.TestDisableDatabase || gobci.TestDisableDestructive {
 		fmt.Println(3)
 		return
 	}
 
-	oci8.Driver.Logger = log.New(os.Stderr, "oci8 ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+	gobci.Driver.Logger = log.New(os.Stderr, "gobci ", log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
 
 	var openString string
 	// [username/[password]@]host[:port][/service_name][?param1=value1&...&paramN=valueN]
-	if len(oci8.TestUsername) > 0 {
-		if len(oci8.TestPassword) > 0 {
-			openString = oci8.TestUsername + "/" + oci8.TestPassword + "@"
+	if len(gobci.TestUsername) > 0 {
+		if len(gobci.TestPassword) > 0 {
+			openString = gobci.TestUsername + "/" + gobci.TestPassword + "@"
 		} else {
-			openString = oci8.TestUsername + "@"
+			openString = gobci.TestUsername + "@"
 		}
 	}
-	openString += oci8.TestHostValid
+	openString += gobci.TestHostValid
 
 	// A normal simple Open to localhost would look like:
-	// db, err := sql.Open("oci8", "127.0.0.1")
+	// db, err := sql.Open("gobci", "127.0.0.1")
 	// For testing, need to use additional variables
-	db, err := sql.Open("oci8", openString)
+	db, err := sql.Open("gobci", openString)
 	if err != nil {
 		fmt.Printf("Open error is not nil: %v", err)
 		return
@@ -214,7 +215,7 @@ func Example_sqlCursorFunction() {
 	}
 
 	// create function
-	functionName := "E_F_CURSOR_" + oci8.TestTimeString
+	functionName := "E_F_CURSOR_" + gobci.TestTimeString
 	query := `create or replace function ` + functionName + ` return SYS_REFCURSOR
 	is
 		l_cursor SYS_REFCURSOR;

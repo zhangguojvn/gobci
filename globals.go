@@ -1,7 +1,8 @@
-package oci8
+package gobci
 
 /*
-#cgo !noPkgConfig pkg-config: oci8
+#cgo CFLAGS: -I./include
+#cgo LDFLAGS: -L/u01/obclient/lib/ -L/usr/lib -L/usr/local/lib -lobci
 #include "oci8.go.h"
 */
 import "C"
@@ -171,7 +172,7 @@ var (
 )
 
 func init() {
-	sql.Register("oci8", Driver)
+	sql.Register("gobci", Driver)
 
 	// set defaultCharset to AL32UTF8
 	var envP *C.OCIEnv

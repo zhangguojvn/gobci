@@ -3,9 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/mattn/go-oci8"
 	"os"
 	"strings"
+
+	_ "github.com/zhangguojvn/gobci"
 )
 
 func getDSN() string {
@@ -28,7 +29,7 @@ or as the first argument! (The format is user/name@host:port/sid)`)
 func main() {
 	os.Setenv("NLS_LANG", "")
 
-	db, err := sql.Open("oci8", getDSN())
+	db, err := sql.Open("gobci", getDSN())
 	if err != nil {
 		fmt.Println(err)
 		return

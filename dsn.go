@@ -1,4 +1,4 @@
-package oci8
+package gobci
 
 import (
 	"bytes"
@@ -333,7 +333,7 @@ func parseQuery(m Values, query string) (err error) {
 	return err
 }
 
-// Encode encodes the values into ``URL encoded'' form
+// Encode encodes the values into “URL encoded” form
 // ("bar=baz&foo=quux") not sorted by key
 func (v Values) Encode() string {
 	if v == nil {

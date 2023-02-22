@@ -1,6 +1,7 @@
+//go:build go1.12
 // +build go1.12
 
-package oci8
+package gobci
 
 import (
 	"context"
