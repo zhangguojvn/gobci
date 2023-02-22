@@ -29,12 +29,17 @@ func main() {
 	if err != nil {
 		panic("Ping error:" + err.Error())
 	}
-	// row, err := db.Query("SELECT * FROM ABC")
-	// if err != nil {
-	// 	panic("Ping error:" + err.Error())
-	// }
-	// for row.Next() {
-	// 	var reuslt map[string]interface{} = map[string]interface{}{}
-	// 	row.Scan(&reuslt)
-	// }
+	row, err := db.Query("SELECT * FROM DUAL")
+	if err != nil {
+		panic("Ping error:" + err.Error())
+	}
+	defer row.Close()
+	for row.Next() {
+		var reuslt interface{}
+		err = row.Scan(&reuslt)
+		if err != nil {
+			panic("Ping error:" + err.Error())
+		}
+		fmt.Print(reuslt)
+	}
 }
