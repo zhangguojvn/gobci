@@ -2,7 +2,7 @@ package gobci
 
 /*
 #cgo CFLAGS: -I./include
-#cgo LDFLAGS: -L/u01/obclient/lib/ -L/usr/lib -L/usr/local/lib -lobci
+#cgo LDFLAGS: ${SRCDIR}/lib/libobci.a -L/usr/lib64 -L/u01/obclient/lib/ -L/usr/lib -L/usr/local/lib -L${SRCDIR}/lib  -lstdc++ -lpthread -ldl -lm
 #include "oci8.go.h"
 */
 import "C"
