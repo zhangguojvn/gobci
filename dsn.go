@@ -232,7 +232,7 @@ func splitRight(s string, c string) (string, string) {
 
 func parseAuthority(authority string) (user, pass string, err error) {
 
-	if i := strings.IndexAny(authority, ":/"); i < 0 {
+	if i := strings.LastIndex(authority, "/"); i < 0 {
 		if authority, err = unescape(authority, encodeUserPassword); err != nil {
 			return "", "", err
 		}
