@@ -22,27 +22,7 @@ func (stmt *Stmt) Close() error {
 	}
 	stmt.closed = true
 
-	var result C.sword
-	if stmt.cacheKey == "" {
-		result = C.OCIStmtRelease(
-			stmt.stmt,           // statement handle
-			stmt.conn.errHandle, // error handle
-			nil,                 // key to be associated with the statement in the cache
-			C.ub4(0),            // length of the key
-			stmt.releaseMode,    // mode
-		)
-	} else {
-		cacheKeyP := cString(stmt.cacheKey)
-		defer C.free(unsafe.Pointer(cacheKeyP))
-
-		result = C.OCIStmtRelease(
-			stmt.stmt,                 // statement handle
-			stmt.conn.errHandle,       // error handle
-			cacheKeyP,                 // key to be associated with the statement in the cache
-			C.ub4(len(stmt.cacheKey)), // length of the key
-			stmt.releaseMode,          // mode
-		)
-	}
+	result := C.OCIHandleFree(unsafe.Pointer(stmt.stmt), C.OCI_HTYPE_STMT)
 
 	stmt.stmt = nil
 

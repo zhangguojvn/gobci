@@ -100,8 +100,7 @@ func (conn *Conn) PrepareContext(ctx context.Context, query string) (driver.Stmt
 
 	queryP := cString(query)
 	defer C.free(unsafe.Pointer(queryP))
-	var stmtTemp *C.OCIStmt
-	stmt := &stmtTemp
+	var stmt *C.OCIStmt
 
 	if ctx.Err() != nil {
 		return nil, ctx.Err()
@@ -110,33 +109,17 @@ func (conn *Conn) PrepareContext(ctx context.Context, query string) (driver.Stmt
 	done := make(chan struct{})
 	go conn.ociBreakDone(ctx, done)
 	defer func() { close(done) }()
-
-	if conn.stmtCacheSize == 0 {
-		if rv := C.OCIStmtPrepare2(
-			conn.svc,                // service context handle
-			stmt,                    // pointer to the statement handle returned
-			conn.errHandle,          // error handle
-			queryP,                  // statement text
-			C.ub4(len(query)),       // statement text length
-			nil,                     // key to be used for searching the statement in the statement cache
-			C.ub4(0),                // length of the key
-			C.ub4(C.OCI_NTV_SYNTAX), // syntax - OCI_NTV_SYNTAX: syntax depends upon the version of the server
-			C.ub4(C.OCI_DEFAULT),    // mode
-		); rv != C.OCI_SUCCESS {
-			return nil, conn.getError(rv)
-		}
-
-		return &Stmt{conn: conn, stmt: *stmt, ctx: ctx, releaseMode: C.OCI_DEFAULT}, nil
+	handle, _, err := conn.ociHandleAlloc(C.OCI_HTYPE_STMT, 0)
+	if err != nil {
+		return nil, fmt.Errorf("allocate stmt handle error: %v", err)
 	}
+	stmt = (*C.OCIStmt)(*handle)
 
-	if rv := C.OCIStmtPrepare2(
-		conn.svc,                // service context handle
+	if rv := C.OCIStmtPrepare(
 		stmt,                    // pointer to the statement handle returned
 		conn.errHandle,          // error handle
 		queryP,                  // statement text
-		C.ub4(len(query)),       // statement text length
-		queryP,                  // key to be used for searching the statement in the statement cache
-		C.ub4(len(query)),       // length of the key
+		C.ub4(len(query)),       // statement text length     // length of the key
 		C.ub4(C.OCI_NTV_SYNTAX), // syntax - OCI_NTV_SYNTAX: syntax depends upon the version of the server
 		C.ub4(C.OCI_DEFAULT),    // mode
 	); rv != C.OCI_SUCCESS && rv != C.OCI_SUCCESS_WITH_INFO {
@@ -144,7 +127,7 @@ func (conn *Conn) PrepareContext(ctx context.Context, query string) (driver.Stmt
 		return nil, conn.getError(rv)
 	}
 
-	return &Stmt{conn: conn, stmt: *stmt, ctx: ctx, releaseMode: C.OCI_DEFAULT, cacheKey: query}, nil
+	return &Stmt{conn: conn, stmt: stmt, ctx: ctx, releaseMode: C.OCI_DEFAULT, cacheKey: query}, nil
 }
 
 // Begin starts a transaction
