@@ -72,6 +72,9 @@ func ParseDSN(dsnString string) (dsn *DSN, err error) {
 	dsn.Connect = host
 
 	qp, err := ParseQuery(params)
+	if err != nil {
+		return nil, err
+	}
 	for k, v := range qp {
 		switch k {
 		case "loc":
@@ -137,7 +140,7 @@ func (tx *Tx) Commit() error {
 	if rv := C.OCITransCommit(
 		tx.conn.svc,
 		tx.conn.errHandle,
-		0,
+		C.OCI_DEFAULT,
 	); rv != C.OCI_SUCCESS {
 		return tx.conn.getError(rv)
 	}
@@ -150,7 +153,7 @@ func (tx *Tx) Rollback() error {
 	if rv := C.OCITransRollback(
 		tx.conn.svc,
 		tx.conn.errHandle,
-		0,
+		C.OCI_DEFAULT,
 	); rv != C.OCI_SUCCESS {
 		return tx.conn.getError(rv)
 	}

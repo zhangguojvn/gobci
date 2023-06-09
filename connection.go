@@ -78,7 +78,7 @@ func (conn *Conn) Close() error {
 	C.OCIHandleFree(unsafe.Pointer(conn.svc), C.OCI_HTYPE_SVCCTX)
 	C.OCIHandleFree(unsafe.Pointer(conn.errHandle), C.OCI_HTYPE_ERROR)
 	C.OCIHandleFree(unsafe.Pointer(conn.txHandle), C.OCI_HTYPE_TRANS)
-	C.OCIHandleFree(unsafe.Pointer(conn.env), C.OCI_HTYPE_ENV)
+	//C.OCIHandleFree(unsafe.Pointer(conn.env), C.OCI_HTYPE_ENV)
 	conn.svc = nil
 	conn.errHandle = nil
 	conn.txHandle = nil

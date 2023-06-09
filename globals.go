@@ -177,8 +177,7 @@ func init() {
 	// set defaultCharset to AL32UTF8
 	var envP *C.OCIEnv
 	envPP := &envP
-	var result C.sword
-	result = C.OCIEnvCreate(envPP, C.OCI_DEFAULT, nil, nil, nil, nil, 0, nil)
+	result := C.OCIEnvCreate(envPP, C.OCI_DEFAULT, nil, nil, nil, nil, 0, nil)
 	if result != C.OCI_SUCCESS {
 		panic("OCIEnvCreate error")
 	}
